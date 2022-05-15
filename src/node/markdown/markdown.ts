@@ -51,7 +51,7 @@ export type { Header }
 
 export const createMarkdownRenderer = (
   siteConfig: SiteConfig,
-  options: MarkdownOptions = {}
+  options: MarkdownOptions = {},
   base: string,
   cleanUrls: boolean = false,
 ): MarkdownRenderer => {

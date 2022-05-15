@@ -34,7 +34,7 @@ export function createMarkdownToVueRenderFn(
 ) {
   const { srcDir } = siteConfig;
 
-  const md = createMarkdownRenderer(siteConfig, options, base, cleanUrls);)
+  const md = createMarkdownRenderer(siteConfig, options, base, cleanUrls);
 
   pages = pages.map((p) => slash(p.replace(/\.md$/, '')))
 
