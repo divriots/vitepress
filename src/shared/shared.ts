@@ -1,4 +1,9 @@
-import { LocaleConfig, SiteData } from '../../types/shared'
+import {
+  HeadConfig,
+  LocaleConfig,
+  SiteData,
+  PageData
+} from '../../types/shared'
 
 export type {
   SiteData,
@@ -94,4 +99,16 @@ function cleanRoute(siteData: SiteData, route: string): string {
   const baseWithoutSuffix = base.endsWith('/') ? base.slice(0, -1) : base
 
   return route.slice(baseWithoutSuffix.length)
+}
+
+/**
+ * Process `head` configuration.
+ */
+export function processHead(
+  head: HeadConfig[] | ((pageData: PageData) => HeadConfig[]),
+  pageData: PageData
+): HeadConfig[] {
+  const combineHead = !head ? [] : typeof head === 'function' ? head(pageData) : head
+  const frontmatterHead = pageData && pageData.frontmatter.head
+  return [...combineHead, ...(frontmatterHead || [])]
 }

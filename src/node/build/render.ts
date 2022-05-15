@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs-extra'
 import { SiteConfig, resolveSiteDataByRoute } from '../config'
-import { HeadConfig } from '../shared'
+import { HeadConfig, processHead } from '../shared'
 import { normalizePath, transformWithEsbuild } from 'vite'
 import { RollupOutput, OutputChunk, OutputAsset } from 'rollup'
 import { slash } from '../utils/slash'
@@ -97,11 +97,7 @@ export async function renderPage(
       ? `${pageData.title} | ${siteData.title}`
       : siteData.title
 
-  const head = addSocialTags(
-    title,
-    ...siteData.head,
-    ...filterOutHeadDescription(pageData.frontmatter.head)
-  )
+  const head = processHead(siteData.head, pageData)
 
   let inlinedScript = ''
   if (config.mpa && result) {
@@ -214,30 +210,4 @@ function renderAttrs(attrs: Record<string, string>): string {
       return ` ${key}="${escape(attrs[key])}"`
     })
     .join('')
-}
-
-function isMetaDescription(headConfig: HeadConfig) {
-  const [type, attrs] = headConfig
-  return type === 'meta' && attrs?.name === 'description'
-}
-
-function filterOutHeadDescription(head: HeadConfig[] | undefined) {
-  return head ? head.filter((h) => !isMetaDescription(h)) : []
-}
-
-function hasTag(head: HeadConfig[], tag: HeadConfig) {
-  const [tagType, tagAttrs] = tag
-  const [attr, value] = Object.entries(tagAttrs)[0] // First key
-  return head.some(([type, attrs]) => type === tagType && attrs[attr] === value)
-}
-
-function addSocialTags(title: string, ...head: HeadConfig[]) {
-  const tags: HeadConfig[] = [
-    ['meta', { name: 'twitter:title', content: title }],
-    ['meta', { property: 'og:title', content: title }]
-  ]
-  tags.filter((tagAttrs) => {
-    if (!hasTag(head, tagAttrs)) head.push(tagAttrs)
-  })
-  return head
 }
