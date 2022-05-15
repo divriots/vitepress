@@ -50,8 +50,8 @@ export interface MarkdownRenderer extends MarkdownIt {
 export type { Header }
 
 export const createMarkdownRenderer = (
-  srcDir: string,
-  options: MarkdownOptions = {},
+  siteConfig: SiteConfig,
+  options: MarkdownOptions = {}
   base: string,
   cleanUrls: boolean = false,
 ): MarkdownRenderer => {
@@ -66,20 +66,16 @@ export const createMarkdownRenderer = (
   md.use(componentPlugin)
     .use(highlightLinePlugin)
     .use(preWrapperPlugin)
-    .use(snippetPlugin, srcDir)
+    .use(snippetPlugin, siteConfig.srcDir)
     .use(hoistPlugin)
     .use(containerPlugin)
     .use(headingPlugin)
     .use(imagePlugin)
-    .use(
-      linkPlugin,
-      {
-        target: '_blank',
-        rel: 'noopener noreferrer',
-        ...options.externalLinks
-      },
-      base, cleanUrls
-    )
+    .use(linkPlugin, {
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      ...options.externalLinks
+    }, base, cleanUrls)
     // 3rd party plugins
     .use(attrs, options.attrs)
     .use(anchor, {

@@ -9,6 +9,7 @@ import { slash } from './utils/slash'
 import chalk from 'chalk'
 import _debug from 'debug'
 import { getGitTimestamp } from './utils/getGitTimestamp'
+import { SiteConfig } from 'config'
 
 const debug = _debug('vitepress:md')
 const cache = new LRUCache<string, MarkdownCompileResult>({ max: 1024 })
@@ -22,7 +23,7 @@ export interface MarkdownCompileResult {
 }
 
 export function createMarkdownToVueRenderFn(
-  srcDir: string,
+  siteConfig: SiteConfig,
   options: MarkdownOptions = {},
   pages: string[],
   userDefines: Record<string, any> | undefined,
@@ -31,7 +32,10 @@ export function createMarkdownToVueRenderFn(
   includeLastUpdatedData = false,
   cleanUrls: boolean = false
 ) {
-  const md = createMarkdownRenderer(srcDir, options, base, cleanUrls);
+  const { srcDir } = siteConfig;
+
+  const md = createMarkdownRenderer(siteConfig, options, base, cleanUrls);)
+
   pages = pages.map((p) => slash(p.replace(/\.md$/, '')))
 
   const userDefineRegex = userDefines
