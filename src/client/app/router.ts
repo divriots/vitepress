@@ -21,13 +21,19 @@ export const RouterSymbol: InjectionKey<Router> = Symbol()
 // matter and is only passed to support same-host hrefs.
 const fakeHost = `http://a.com`
 
+const notFoundPageData: PageData = {
+  relativePath: '',
+  title: '404',
+  description: 'Not Found',
+  headers: [],
+  frontmatter: {},
+  lastUpdated: 0
+}
+
 const getDefaultRoute = (): Route => ({
   path: '/',
   component: null,
-  // this will be set upon initial page load, which is before
-  // the app is mounted, so it's guaranteed to be available in
-  // components. We just need enough data for 404 pages to render.
-  data: { frontmatter: {} } as any
+  data: notFoundPageData
 })
 
 interface PageModule {
@@ -63,7 +69,7 @@ export function createRouter(
 
   let latestPendingPath: string | null = null
 
-  async function loadPage(href: string, scrollPosition = 0) {
+  async function loadPage(href: string, scrollPosition = 0, isRetry = false) {
     const targetLoc = new URL(href, fakeHost)
     const pendingPath = (latestPendingPath = targetLoc.pathname)
     try {
@@ -111,10 +117,24 @@ export function createRouter(
       if (!err.message.match(/fetch/)) {
         console.error(err)
       }
+
+      // retry on fetch fail: the page to hash map may have been invalidated
+      // because a new deploy happened while the page is open. Try to fetch
+      // the updated pageToHash map and fetch again.
+      if (!isRetry) {
+        try {
+          const res = await fetch(siteDataRef.value.base + 'hashmap.json')
+          ;(window as any).__VP_HASH_MAP__ = await res.json()
+          await loadPage(href, scrollPosition, true)
+          return
+        } catch (e) {}
+      }
+
       if (latestPendingPath === pendingPath) {
         latestPendingPath = null
         route.path = pendingPath
         route.component = fallbackComponent ? markRaw(fallbackComponent) : null
+        route.data = notFoundPageData
       }
     }
   }
@@ -190,7 +210,7 @@ function scrollTo(el: HTMLElement, hash: string, smooth = false) {
   let target: Element | null = null
 
   try {
-    target = el.classList.contains('.header-anchor')
+    target = el.classList.contains('header-anchor')
       ? el
       : document.querySelector(decodeURIComponent(hash))
   } catch (e) {
@@ -198,7 +218,20 @@ function scrollTo(el: HTMLElement, hash: string, smooth = false) {
   }
 
   if (target) {
-    const targetTop = (target as HTMLElement).offsetTop
+    let offset = siteDataRef.value.scrollOffset
+    if (typeof offset === 'string') {
+      offset =
+        document.querySelector(offset)!.getBoundingClientRect().bottom + 24
+    }
+    const targetPadding = parseInt(
+      window.getComputedStyle(target as HTMLElement).paddingTop,
+      10
+    )
+    const targetTop =
+      window.scrollY +
+      (target as HTMLElement).getBoundingClientRect().top -
+      offset +
+      targetPadding
     // only smooth scroll if distance is smaller than screen height.
     if (!smooth || Math.abs(targetTop - window.scrollY) > window.innerHeight) {
       window.scrollTo(0, targetTop)

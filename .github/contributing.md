@@ -23,7 +23,7 @@ Hi! We're really excited that you are interested in contributing to VitePress. B
 
 ## Development Setup
 
-You will need [pnpm](https://pnpm.io/)
+You will need [pnpm](https://pnpm.io)
 
 After cloning the repo, run:
 

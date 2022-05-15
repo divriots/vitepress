@@ -1,3 +1,57 @@
+## [0.22.3](https://github.com/vuejs/vitepress/compare/v0.22.2...v0.22.3) (2022-02-22)
+
+### Bug Fixes
+
+- append base to links ([#502](https://github.com/vuejs/vitepress/issues/502)) ([804954c](https://github.com/vuejs/vitepress/commit/804954cf4d5417b1abcba9854ed5f064348292c5)), closes [#252](https://github.com/vuejs/vitepress/issues/252)
+- avoid minimizing non-javascript inline scripts ([#517](https://github.com/vuejs/vitepress/issues/517)) ([779b789](https://github.com/vuejs/vitepress/commit/779b78902fc7b1f9e7806751c0ca1e229a2161ce)), closes [#538](https://github.com/vuejs/vitepress/issues/538) [#540](https://github.com/vuejs/vitepress/issues/540)
+- **client router:** tolerant invalid hash selector typo ([#506](https://github.com/vuejs/vitepress/issues/506)) ([ffe0c40](https://github.com/vuejs/vitepress/commit/ffe0c40ebc42d7769b5378775cdffcab52d3cf11))
+- don't add .html to urls of non-html files ([#515](https://github.com/vuejs/vitepress/issues/515)) ([34d1542](https://github.com/vuejs/vitepress/commit/34d1542f466e2eed28b1be7153d1c3461d84528f)), closes [#265](https://github.com/vuejs/vitepress/issues/265)
+- normalize relative img src ([#514](https://github.com/vuejs/vitepress/issues/514)) ([9270477](https://github.com/vuejs/vitepress/commit/9270477fa59545978dc2732ac0a8091bed39625f)), closes [#450](https://github.com/vuejs/vitepress/issues/450)
+- require at least node v14 ([#546](https://github.com/vuejs/vitepress/issues/546)) ([7cf7011](https://github.com/vuejs/vitepress/commit/7cf70111a5a00579d46453b682ef33169c7846c5))
+- reset page data on 404 ([#497](https://github.com/vuejs/vitepress/issues/497)) ([28eaa3b](https://github.com/vuejs/vitepress/commit/28eaa3b04ab71674330151d2a9b79d52c382e71e))
+
+## [0.22.2](https://github.com/vuejs/vitepress/compare/v0.22.1...v0.22.2) (2022-02-14)
+
+### Features
+
+- improve default chunk strategy + page hash stability ([1ef69e2](https://github.com/vuejs/vitepress/commit/1ef69e212f91e43431b4fe4bdba17ca4f29a7b49))
+
+## [0.22.1](https://github.com/vuejs/vitepress/compare/v0.22.0...v0.22.1) (2022-02-14)
+
+### Features
+
+- automatically update hash map + retry on failed page fetch ([2324948](https://github.com/vuejs/vitepress/commit/23249483d60da1952c64a1f764873652b587c2dc))
+- use git-based lastUpdated data ([d32d8d4](https://github.com/vuejs/vitepress/commit/d32d8d441917dcb480a6735da78c2d6fc3e589c0))
+
+  Note: lastUpdated data is now disabled by default due to the performance overhead of retrieving the git information. This also means each page's metadata object no longer contains the `lastUpdated` property by default - it will only be present if the new `lastUpdated: true` config option is enabled.
+
+# [0.22.0](https://github.com/vuejs/vitepress/compare/v0.21.6...v0.22.0) (2022-02-11)
+
+- Upgrade to Vite 2.8
+
+## [0.21.6](https://github.com/vuejs/vitepress/compare/v0.21.5...v0.21.6) (2022-01-19)
+
+### Perf
+
+- Avoid wrapping siteData as readonly proxy in production builds
+
+## [0.21.5](https://github.com/vuejs/vitepress/compare/v0.21.4...v0.21.5) (2022-01-16)
+
+### Bug Fixes
+
+- allow overriding title if home is true ([#493](https://github.com/vuejs/vitepress/issues/493)) ([88d57a9](https://github.com/vuejs/vitepress/commit/88d57a93ef2689a8f5344b7f38b26db5ea86759b))
+- **types:** fix vitepress/theme type ([eabf6d2](https://github.com/vuejs/vitepress/commit/eabf6d2aa69d2a5452042bbb59edbbbc95aece87)), closes [#489](https://github.com/vuejs/vitepress/issues/489) [#438](https://github.com/vuejs/vitepress/issues/438) [#494](https://github.com/vuejs/vitepress/issues/494) [#442](https://github.com/vuejs/vitepress/issues/442)
+
+### Features
+
+- scrollOffset option ([b66785d](https://github.com/vuejs/vitepress/commit/b66785d68a86c118a7a036f3de8b3e504390f1da))
+
+## [0.21.4](https://github.com/vuejs/vitepress/compare/v0.21.3...v0.21.4) (2022-01-07)
+
+### Bug Fixes
+
+- set \_\_data in md.render ([dfbc932](https://github.com/vuejs/vitepress/commit/dfbc932fac50d39b047b211cedca0dcce05aebc8))
+
 ## [0.21.3](https://github.com/vuejs/vitepress/compare/v0.21.2...v0.21.3) (2022-01-06)
 
 ### Bug Fixes

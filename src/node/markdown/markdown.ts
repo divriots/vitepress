@@ -11,6 +11,7 @@ import { hoistPlugin } from './plugins/hoist'
 import { preWrapperPlugin } from './plugins/preWrapper'
 import { linkPlugin } from './plugins/link'
 import { headingPlugin } from './plugins/headings'
+import { imagePlugin } from './plugins/image'
 import { Header } from '../shared'
 import anchor from 'markdown-it-anchor'
 import attrs from 'markdown-it-attrs'
@@ -51,13 +52,15 @@ export type { Header }
 export const createMarkdownRenderer = (
   siteConfig: SiteConfig,
   options: MarkdownOptions = {}
+  base: string,
+  cleanUrls: boolean = false,
 ): MarkdownRenderer => {
   const md = MarkdownIt({
     html: true,
     linkify: true,
     highlight,
     ...options
-  })
+  }) as MarkdownRenderer
 
   // custom plugins
   md.use(componentPlugin)
@@ -67,11 +70,12 @@ export const createMarkdownRenderer = (
     .use(hoistPlugin)
     .use(containerPlugin)
     .use(headingPlugin)
+    .use(imagePlugin)
     .use(linkPlugin, {
       target: '_blank',
       rel: 'noopener noreferrer',
       ...options.externalLinks
-    }, siteConfig.cleanUrls)
+    }, base, cleanUrls)
     // 3rd party plugins
     .use(attrs, options.attrs)
     .use(anchor, {
@@ -96,5 +100,11 @@ export const createMarkdownRenderer = (
     md.use(lineNumberPlugin)
   }
 
-  return md as MarkdownRenderer
+  const originalRender = md.render
+  md.render = (...args) => {
+    md.__data = {}
+    return originalRender.call(md, ...args)
+  }
+
+  return md
 }

@@ -37,6 +37,7 @@ export interface UserConfig<ThemeConfig = any> {
   themeConfig?: ThemeConfig
   locales?: Record<string, LocaleConfig>
   markdown?: MarkdownOptions
+  lastUpdated?: boolean
   /**
    * Options to pass on to `@vitejs/plugin-vue`
    */
@@ -50,6 +51,12 @@ export interface UserConfig<ThemeConfig = any> {
   srcExclude?: string[]
   outDir?: string
   shouldPreload?: (link: string, page: string) => boolean
+
+  /**
+   * Configure the scroll offset when the theme has a sticky header.
+   * Can be a number or a selector element to get the offset from.
+   */
+  scrollOffset?: number | string
 
   /**
    * Enable MPA / zero-JS mode
@@ -74,7 +81,7 @@ export type RawConfigExports<ThemeConfig = any> =
 export interface SiteConfig<ThemeConfig = any>
   extends Pick<
     UserConfig,
-    'markdown' | 'vue' | 'vite' | 'shouldPreload' | 'mpa'
+    'markdown' | 'vue' | 'vite' | 'shouldPreload' | 'mpa' | 'lastUpdated'
   > {
   root: string
   srcDir: string
@@ -149,6 +156,7 @@ export async function resolveConfig(
     tempDir: resolve(root, '.temp'),
     cleanUrls: !!userConfig.cleanUrls,
     markdown: userConfig.markdown,
+    lastUpdated: userConfig.lastUpdated,
     alias: resolveAliases(root, themeDir),
     vue: userConfig.vue,
     vite: userConfig.vite,
@@ -254,6 +262,7 @@ export async function resolveSiteData(
     themeConfig: userConfig.themeConfig || {},
     locales: userConfig.locales || {},
     langs: createLangDictionary(userConfig),
+    scrollOffset: userConfig.scrollOffset || 90,
     cleanUrls: userConfig.cleanUrls || false
   }
 }

@@ -8,6 +8,7 @@ import { PageData, HeadConfig, EXTERNAL_URL_RE } from './shared'
 import { slash } from './utils/slash'
 import chalk from 'chalk'
 import _debug from 'debug'
+import { getGitTimestamp } from './utils/getGitTimestamp'
 import { SiteConfig } from 'config'
 
 const debug = _debug('vitepress:md')
@@ -26,11 +27,15 @@ export function createMarkdownToVueRenderFn(
   options: MarkdownOptions = {},
   pages: string[],
   userDefines: Record<string, any> | undefined,
-  isBuild = false
+  isBuild = false,
+  base: string,
+  includeLastUpdatedData = false,
+  cleanUrls: boolean = false
 ) {
   const { srcDir } = siteConfig;
 
-  const md = createMarkdownRenderer(siteConfig, options)
+  const md = createMarkdownRenderer(siteConfig, options, base, cleanUrls);)
+
   pages = pages.map((p) => slash(p.replace(/\.md$/, '')))
 
   const userDefineRegex = userDefines
@@ -42,11 +47,11 @@ export function createMarkdownToVueRenderFn(
       )
     : null
 
-  return (
+  return async (
     src: string,
     file: string,
     publicDir: string
-  ): MarkdownCompileResult => {
+  ): Promise<MarkdownCompileResult> => {
     const relativePath = slash(path.relative(srcDir, file))
     const dir = path.dirname(file)
 
@@ -72,7 +77,6 @@ export function createMarkdownToVueRenderFn(
     // reset state before render
     md.__path = file
     md.__relativePath = relativePath
-    md.__data = {}
 
     let html = md.render(content)
     const data = md.__data
@@ -108,6 +112,8 @@ export function createMarkdownToVueRenderFn(
     if (data.links) {
       const dir = path.dirname(file)
       for (let url of data.links) {
+        if (/\.(?!html|md)\w+($|\?)/i.test(url)) continue
+
         if (url.replace(EXTERNAL_URL_RE, '').startsWith('//localhost:')) {
           recordDeadLink(url)
           continue
@@ -136,9 +142,11 @@ export function createMarkdownToVueRenderFn(
       description: inferDescription(frontmatter),
       frontmatter,
       headers: data.headers || [],
-      relativePath,
-      // TODO use git timestamp?
-      lastUpdated: Math.round(fs.statSync(file).mtimeMs)
+      relativePath
+    }
+
+    if (includeLastUpdatedData) {
+      pageData.lastUpdated = await getGitTimestamp(file)
     }
 
     const vueSrc =
@@ -195,11 +203,11 @@ function genPageDataCode(tags: string[], data: PageData) {
 }
 
 const inferTitle = (frontmatter: any, content: string) => {
-  if (frontmatter.home) {
-    return 'Home'
-  }
   if (frontmatter.title) {
     return deeplyParseHeader(frontmatter.title)
+  }
+  if (frontmatter.home) {
+    return 'Home'
   }
   const match = content.match(/^\s*#+\s+(.*)/m)
   if (match) {

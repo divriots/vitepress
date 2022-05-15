@@ -8,7 +8,7 @@ export interface PageData {
   description: string
   headers: Header[]
   frontmatter: Record<string, any>
-  lastUpdated: number
+  lastUpdated?: number
 }
 
 export interface SiteData<ThemeConfig = any> {
@@ -22,6 +22,7 @@ export interface SiteData<ThemeConfig = any> {
   description: string
   head: HeadConfig[]
   themeConfig: ThemeConfig
+  scrollOffset: number | string
   locales: Record<string, LocaleConfig>
   /**
    * Available locales for the site when it has defined `locales` in its
