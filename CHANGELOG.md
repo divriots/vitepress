@@ -1,3 +1,5 @@
+## [0.22.3-divRIOTS.3](https://github.com/vuejs/vitepress/compare/v0.22.3-divRIOTS.2...v0.22.3-divRIOTS.3) (2022-05-31)
+
 ## [0.22.3](https://github.com/vuejs/vitepress/compare/v0.22.2...v0.22.3) (2022-02-22)
 
 ### Bug Fixes
