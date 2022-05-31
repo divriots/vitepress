@@ -62,7 +62,7 @@ export function createRouter(
     if (inBrowser) {
       if(!url.pathname.startsWith(siteDataRef.value.base || '/')) {
         window.location.href = url.href
-        return
+        return Promise.resolve()
       }
       // save scroll position before changing url
       history.replaceState({ scrollPosition: window.scrollY }, document.title)
