@@ -4,6 +4,7 @@
 import { useRoute } from '../router'
 import { onMounted, onUnmounted, watch } from 'vue'
 import { inBrowser, pathToFile } from '../utils'
+import { siteDataRef } from '../data'
 
 const hasFetched = new Set<string>()
 const createLink = () => document.createElement('link')
@@ -76,6 +77,9 @@ export function usePrefetch() {
       document.querySelectorAll('#app a').forEach((link) => {
         const { target, hostname, pathname } = link as HTMLAnchorElement
         const extMatch = pathname.match(/\.\w+$/)
+        if(!pathname.startsWith(siteDataRef.value.base || '/')){
+          return
+        }
         if (extMatch && extMatch[0] !== '.html') {
           return
         }
