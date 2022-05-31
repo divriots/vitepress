@@ -77,8 +77,8 @@ export function usePrefetch() {
       document.querySelectorAll('#app a').forEach((link) => {
         const { target, hostname, pathname } = link as HTMLAnchorElement
         const extMatch = pathname.match(/\.\w+$/)
-        if(!pathname.startsWith(siteDataRef.value.base)){
-          return;
+        if(!pathname.startsWith(siteDataRef.value.base || '/')){
+          return
         }
         if (extMatch && extMatch[0] !== '.html') {
           return
