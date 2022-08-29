@@ -1,4 +1,4 @@
-lockfileVersion: 5.3
+lockfileVersion: 5.4
 
 importers:
 
@@ -20,6 +20,7 @@ importers:
       '@types/lru-cache': ^5.1.0
       '@types/markdown-it': ^12.0.1
       '@types/micromatch': ^4.0.2
+      '@types/minimist': ^1.2.2
       '@types/node': ^15.6.1
       '@types/polka': ^0.5.3
       '@vitejs/plugin-vue': ^2.2.0
@@ -85,6 +86,7 @@ importers:
       '@types/lru-cache': 5.1.1
       '@types/markdown-it': 12.2.1
       '@types/micromatch': 4.0.2
+      '@types/minimist': 1.2.2
       '@types/node': 15.14.9
       '@types/polka': 0.5.3
       chalk: 4.1.2
@@ -105,7 +107,7 @@ importers:
       lint-staged: 11.1.2
       lru-cache: 6.0.0
       markdown-it: 12.3.2
-      markdown-it-anchor: 8.4.1_940cc64b929ea62ef73eba29fd968cec
+      markdown-it-anchor: 8.4.1_sqgmms4st2tc55z6xiu73fum5q
       markdown-it-attrs: 4.1.3_markdown-it@12.3.2
       markdown-it-container: 3.0.0
       markdown-it-emoji: 2.0.0
@@ -118,7 +120,7 @@ importers:
       prettier: 2.4.1
       rimraf: 3.0.2
       rollup: 2.57.0
-      rollup-plugin-esbuild: 4.8.2_esbuild@0.14.3+rollup@2.57.0
+      rollup-plugin-esbuild: 4.8.2_ofyf2sflbd3x5kuhhv7zkdsvfy
       semver: 7.3.5
       sirv: 1.0.17
       typescript: 4.4.3
@@ -130,9 +132,9 @@ importers:
 
   examples/minimal:
     specifiers:
-      vitepress: workspace:*
+      '@divriots/vitepress': workspace:*
     devDependencies:
-      vitepress: link:../..
+      '@divriots/vitepress': link:../..
 
 packages:
 
@@ -261,10 +263,20 @@ packages:
       '@babel/highlight': 7.14.5
     dev: true
 
+  /@babel/helper-string-parser/7.18.10:
+    resolution: {integrity: sha512-XtIfWmeNY3i4t7t4D2t02q50HvqHybPqW2ki1kosnvWCwuCMeo81Jf0gwr85jy/neUdg5XDdeFE/80DXiO+njw==}
+    engines: {node: '>=6.9.0'}
+    dev: false
+
   /@babel/helper-validator-identifier/7.15.7:
     resolution: {integrity: sha512-K4JvCtQqad9OY2+yTU8w+E82ywk/fe+ELNlt1G8z3bVGlZfn/hOcQQsUhGhW/N+tb3fxK800wLtKOE/aM0m72w==}
     engines: {node: '>=6.9.0'}
     dev: true
+
+  /@babel/helper-validator-identifier/7.18.6:
+    resolution: {integrity: sha512-MmetCkz9ej86nJQV+sFCxoGGrUbU3q02kgLciwkrt9QqEB7cP39oKEY0PakknEO0Gu20SskMRi+AYZ3b1TpN9g==}
+    engines: {node: '>=6.9.0'}
+    dev: false
 
   /@babel/highlight/7.14.5:
     resolution: {integrity: sha512-qf9u2WFWVV0MppaL877j2dBtQIDgmidgjGk5VIMw3OadXvYaXn66U1BFlH2t4+t3i+8PhedppRv+i40ABzd+gg==}
@@ -279,6 +291,17 @@ packages:
     resolution: {integrity: sha512-6V0qdPUaiVHH3RtZeLIsc+6pDhbYzHR8ogA8w+f+Wc77DuXto19g2QUwveINoS34Uw+W8/hQDGJCx+i4n7xcng==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+    dependencies:
+      '@babel/types': 7.18.13
+    dev: false
+
+  /@babel/types/7.18.13:
+    resolution: {integrity: sha512-ePqfTihzW0W6XAU+aMw2ykilisStJfDnsejDCXRchCcMJ4O0+8DhPXf2YUbZ6wjBlsEmZwLK/sPweWtu8hcJYQ==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      '@babel/helper-string-parser': 7.18.10
+      '@babel/helper-validator-identifier': 7.18.6
+      to-fast-properties: 2.0.0
     dev: false
 
   /@docsearch/css/3.0.0-alpha.41:
@@ -1183,6 +1206,8 @@ packages:
       on-headers: 1.0.2
       safe-buffer: 5.1.2
       vary: 1.1.2
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /concat-map/0.0.1:
@@ -1339,8 +1364,8 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
     dependencies:
-      is-text-path: 1.0.1
       JSONStream: 1.3.5
+      is-text-path: 1.0.1
       lodash: 4.17.21
       meow: 8.1.2
       split2: 3.2.2
@@ -1405,6 +1430,11 @@ packages:
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}
+    peerDependencies:
+      supports-color: '*'
+    peerDependenciesMeta:
+      supports-color:
+        optional: true
     dependencies:
       ms: 2.0.0
     dev: true
@@ -2663,7 +2693,7 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
-  /markdown-it-anchor/8.4.1_940cc64b929ea62ef73eba29fd968cec:
+  /markdown-it-anchor/8.4.1_sqgmms4st2tc55z6xiu73fum5q:
     resolution: {integrity: sha512-sLODeRetZ/61KkKLJElaU3NuU2z7MhXf12Ml1WJMSdwpngeofneCRF+JBbat8HiSqhniOMuTemXMrsI7hA6XyA==}
     peerDependencies:
       '@types/markdown-it': '*'
@@ -3285,7 +3315,7 @@ packages:
       glob: 7.2.0
     dev: true
 
-  /rollup-plugin-esbuild/4.8.2_esbuild@0.14.3+rollup@2.57.0:
+  /rollup-plugin-esbuild/4.8.2_ofyf2sflbd3x5kuhhv7zkdsvfy:
     resolution: {integrity: sha512-wsaYNOjzTb6dN1qCIZsMZ7Q0LWiPJklYs2TDI8vJA2LUbvtPUY+17TC8C0vSat3jPMInfR9XWKdA7ttuwkjsGQ==}
     engines: {node: '>=12'}
     peerDependencies:
@@ -3658,6 +3688,11 @@ packages:
     resolution: {integrity: sha512-4VXqQzzh9gC5uOLk77cLr9R3wqJq07xJlgM9IUdCNJCet139r+046ETKbU1x7mGs7B0k7eopyH5U6yflbBXNyA==}
     engines: {node: '>=14.0.0'}
     dev: true
+
+  /to-fast-properties/2.0.0:
+    resolution: {integrity: sha512-/OaKK0xYrs3DmxRYqL/yDc+FxFUVYhDlXMhRmv3z915w2HF1tnN1omB354j8VUGO/hbRzyD6Y3sA7v7GS/ceog==}
+    engines: {node: '>=4'}
+    dev: false
 
   /to-regex-range/5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}

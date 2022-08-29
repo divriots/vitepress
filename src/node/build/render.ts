@@ -97,7 +97,7 @@ export async function renderPage(
       ? `${pageData.title} | ${siteData.title}`
       : siteData.title
 
-  const head = processHead(siteData.head, pageData)
+  const head = await processHead(siteData.head, pageData)
 
   let inlinedScript = ''
   if (config.mpa && result) {
