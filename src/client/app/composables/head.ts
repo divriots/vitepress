@@ -53,7 +53,7 @@ export function useUpdateHead(route: Route, siteDataByRouteRef: Ref<SiteData>) {
     managedHeadTags = newEls
   }
 
-  watchEffect(() => {
+  watchEffect(async () => {
     const pageData = route.data
     const siteData = siteDataByRouteRef.value
     const pageTitle = pageData && pageData.title
@@ -65,7 +65,7 @@ export function useUpdateHead(route: Route, siteDataByRouteRef: Ref<SiteData>) {
       .querySelector(`meta[name=description]`)!
       .setAttribute('content', pageDescription || siteData.description)
 
-    updateHeadTags(processHead(siteData.head, pageData));
+    updateHeadTags(await processHead(siteData.head, pageData));
   })
 }
 

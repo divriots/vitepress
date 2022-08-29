@@ -34,7 +34,7 @@ export interface UserConfig<ThemeConfig = any> {
   base?: string
   title?: string
   description?: string
-  head?: HeadConfig[] | ((pageData: PageData) => HeadConfig[])
+  head?: HeadConfig[] | ((pageData: PageData) => HeadConfig[] | Promise<HeadConfig[]>)
   themeConfig?: ThemeConfig
   locales?: Record<string, LocaleConfig>
   markdown?: MarkdownOptions

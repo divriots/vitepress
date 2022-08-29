@@ -104,11 +104,11 @@ function cleanRoute(siteData: SiteData, route: string): string {
 /**
  * Process `head` configuration.
  */
-export function processHead(
-  head: HeadConfig[] | ((pageData: PageData) => HeadConfig[]),
+export async function processHead(
+  head: HeadConfig[] | ((pageData: PageData) => HeadConfig[] | Promise<HeadConfig[]>),
   pageData: PageData
-): HeadConfig[] {
-  const combineHead = !head ? [] : typeof head === 'function' ? head(pageData) : head
+): Promise<HeadConfig[]> {
+  const combineHead = !head ? [] : typeof head === 'function' ? await head(pageData) : head
   const frontmatterHead = pageData && pageData.frontmatter.head
   return [...combineHead, ...(frontmatterHead || [])]
 }
