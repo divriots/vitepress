@@ -1,6 +1,6 @@
 {
   "name": "@divriots/vitepress",
-  "version": "0.22.3-divRIOTS.3",
+  "version": "0.22.3-divRIOTS.4",
   "description": "Vite & Vue powered static site generator",
   "main": "dist/node/index.js",
   "typings": "types/index.d.ts",
